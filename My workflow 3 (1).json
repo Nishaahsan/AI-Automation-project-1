@@ -1,0 +1,248 @@
+{
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1LJarG9g7DHcUnqSEOHf9WT1Dh5eAWGrqgTsyT4RDzQg",
+          "mode": "list",
+          "cachedResultName": "Untitled spreadsheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LJarG9g7DHcUnqSEOHf9WT1Dh5eAWGrqgTsyT4RDzQg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LJarG9g7DHcUnqSEOHf9WT1Dh5eAWGrqgTsyT4RDzQg/edit#gid=0"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "2f06541a-5960-4094-b274-2c22930dfb96",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "k2DHvFLauMZ2XDSR",
+          "name": "Google Sheet Trigger"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "db69cb04-5a0a-4a6a-bc38-021284afd7e6",
+              "name": "prompt",
+              "value": "={{ $json.Product }}\n{{ $json.Region }}\n{{ $json.Month }}\n{{ $json.Revenue }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "3e755841-9c97-490c-b940-255f6a13a108",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1LJarG9g7DHcUnqSEOHf9WT1Dh5eAWGrqgTsyT4RDzQg",
+          "mode": "list",
+          "cachedResultName": "Sales Report spreadsheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LJarG9g7DHcUnqSEOHf9WT1Dh5eAWGrqgTsyT4RDzQg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1483300280,
+          "mode": "list",
+          "cachedResultName": "AI insight",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LJarG9g7DHcUnqSEOHf9WT1Dh5eAWGrqgTsyT4RDzQg/edit#gid=1483300280"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Product": "={{ $('Google Sheets Trigger').item.json.Product }}",
+            "Region": "={{ $('Google Sheets Trigger').item.json.Region }}",
+            "Month": "={{ $('Google Sheets Trigger').item.json.Month }}",
+            "Revenue ": "={{ $('Google Sheets Trigger').item.json.Revenue }}",
+            "AI Insight": "={{ $('Google Sheets Trigger').item.json['AI Insight'] }}"
+          },
+          "matchingColumns": [
+            "Product"
+          ],
+          "schema": [
+            {
+              "id": "Product",
+              "displayName": "Product",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Region",
+              "displayName": "Region",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Month",
+              "displayName": "Month",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Revenue ",
+              "displayName": "Revenue ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI Insight",
+              "displayName": "AI Insight",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        864,
+        0
+      ],
+      "id": "06a81191-c422-4877-be45-975ee5ac7f1b",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "QW2epcjG28PFQc1g",
+          "name": "OAUTH ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        464,
+        0
+      ],
+      "id": "9fe4b5f5-14ee-4f4a-a6a3-8382f506da72",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "hsYequ6EmnJDUQ0c",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "8333d360-68ce-43c0-af52-c5f9ea34ab81",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a28836032c960f6f14186e7851fa614855835f2e0f01d0094fc93c43cb70870c"
+  },
+  "nodeGroups": [],
+  "id": "8tobi4AhcNkaxI68",
+  "tags": []
+}
